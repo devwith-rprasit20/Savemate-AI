@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAVEMATE • Smart Spending. Smarter Saving.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0c0d10;
+      --card:#12141a;
+      --muted:#1a1d25;
+      --primary:#7dd3fc;       /* sky-300 */
+      --primary-2:#22d3ee;     /* cyan-400 */
+      --accent:#a78bfa;        /* violet-300 */
+      --text:#e5e7eb;          /* gray-200 */
+      --text-dim:#9ca3af;      /* gray-400 */
+      --danger:#fb7185;        /* rose-400 */
+      --success:#86efac;       /* green-300 */
+      --warning:#fde68a;       /* amber-200 */
+      --shadow: 0 20px 40px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; 
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(34,211,238,.15), transparent 60%),
+                  radial-gradient(1000px 600px at -10% 0%, rgba(167,139,250,.14), transparent 60%),
+                  var(--bg);
+      color:var(--text); line-height:1.6;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1100px; margin:0 auto; padding:0 20px}
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(12,13,16,.85), rgba(12,13,16,.55));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.3px}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; 
+      background:linear-gradient(120deg, rgba(34,211,238,.12), rgba(167,139,250,.12));
+      border:1px solid rgba(255,255,255,.08); font-size:12px; color:var(--text-dim)}
+    .pill-btn{
+      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:999px; 
+      background:linear-gradient(120deg, rgba(125,211,252,.15), rgba(167,139,250,.15));
+      border:1px solid rgba(255,255,255,.08); color:var(--text); cursor:pointer; font-weight:600;
+      box-shadow: var(--shadow);
+    }
+    nav ul{display:flex; gap:18px; list-style:none; padding:0; margin:0}
+    nav a{padding:8px 12px; border-radius:10px; color:var(--text-dim)}
+    nav a:hover{background:rgba(255,255,255,.06); color:var(--text)}
+
+    /* Hero */
+    .hero{padding:60px 0 40px}
+    .hero .wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:28px; align-items:center}
+    .title{font-size:46px; line-height:1.15; margin:10px 0 12px; font-weight:900}
+    .subtitle{font-size:18px; color:var(--text-dim)}
+    .cta{display:flex; gap:12px; margin-top:18px}
+    .card{
+      background:linear-gradient(180deg, rgba(26,29,37,.85), rgba(18,20,26,.9));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius); padding:18px; box-shadow: var(--shadow);
+    }
+    .hero-visual{height:320px; border-radius:var(--radius); position:relative; overflow:hidden}
+    .glow{position:absolute; inset:-40%; background: radial-gradient( circle at 70% 20%, rgba(34,211,238,.25), transparent 40%),
+                                      radial-gradient( circle at 30% 80%, rgba(167,139,250,.22), transparent 40%)}
+    .kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px}
+    .kpi{padding:14px; border-radius:14px; background:var(--muted); border:1px solid rgba(255,255,255,.06)}
+    .kpi b{font-size:18px}
+
+    section{padding:54px 0}
+    section h2{margin:0 0 10px; font-size:28px}
+    section p.lead{color:var(--text-dim); margin:0 0 18px}
+
+    /* Problems */
+    .grid{display:grid; gap:14px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    
+    @media (max-width: 900px){
+      .hero .wrap{grid-template-columns:1fr}
+      .grid.cols-3{grid-template-columns:1fr}
+      .grid.cols-2{grid-template-columns:1fr}
+    }
+
+    /* Carousel */
+    .carousel{position:relative; overflow:hidden; border-radius:var(--radius); border:1px solid rgba(255,255,255,.08); background:var(--card)}
+    .slides{display:flex; transition:transform .5s ease}
+    .slide{min-width:100%; padding:20px}
+    .dots{display:flex; gap:8px; justify-content:center; margin-top:10px}
+    .dot{width:10px; height:10px; border-radius:50%; background:#2a2f3a; border:1px solid rgba(255,255,255,.08); cursor:pointer}
+    .dot.active{background:linear-gradient(120deg, var(--primary), var(--accent))}
+
+    /* Panels */
+    .panel{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
+    @media (max-width: 900px){ .panel{grid-template-columns: 1fr} }
+
+    /* Forms */
+    label{display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px}
+    input,select,textarea{width:100%; padding:12px 12px; border-radius:12px; background:#0f1116; border:1px solid #262a33; color:var(--text)}
+    input:focus,select:focus,textarea:focus{outline:none; border-color:var(--primary)}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.12); cursor:pointer; background:linear-gradient(120deg, rgba(125,211,252,.16), rgba(167,139,250,.16)); color:var(--text); font-weight:600}
+    .btn.ghost{background:transparent}
+    .btn.danger{background: rgba(251, 113, 133, .15); border-color: rgba(251, 113, 133, .35)}
+
+    table{width:100%; border-collapse:collapse; font-size:14px}
+    th,td{padding:10px 12px; border-bottom:1px dashed rgba(255,255,255,.07)}
+    th{color:var(--text-dim); font-weight:600; text-align:left}
+
+    /* Sticky float tips */
+    .toast{position:fixed; right:16px; bottom:16px; background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px 14px; box-shadow: var(--shadow); display:none}
+
+    /* Chatbot */
+    .chat{height:320px; overflow:auto; padding:12px; border-radius:14px; background:var(--muted); border:1px solid rgba(255,255,255,.06)}
+    .msg{margin:8px 0; display:flex; gap:10px}
+    .msg.user{justify-content:flex-end}
+    .bubble{max-width:68%; padding:10px 12px; border-radius:12px; background:#0f1116; border:1px solid #262a33}
+    .msg.user .bubble{background:linear-gradient(120deg, rgba(125,211,252,.16), rgba(167,139,250,.16));}
+
+    footer{padding:32px 0 64px; color:var(--text-dim)}
+    .footgrid{display:grid; grid-template-columns:2fr 1fr 1fr; gap:20px}
+    @media (max-width: 900px){ .footgrid{grid-template-columns:1fr} }
+
+    /* Social Icons */
+    .social-icons {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 1000;
+    }
+    .social-icons a {
+      opacity: 0.85;
+      transition: opacity 0.2s, transform 0.2s;
+      border-radius: 50%;
+      display: inline-flex;
+      background: rgba(18,20,26,0.85);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      padding: 6px;
+    }
+    .social-icons a:hover {
+      opacity: 1;
+      transform: scale(1.12);
+      background: linear-gradient(120deg, var(--primary), var(--accent));
+    }
+    .social-icons svg {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><span style="font-size:22px">💠</span> SAVEMATE</div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#problems">Problems</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#wallet">SaveSphere</a></li>
+          <li><a href="#tracker">Tracker</a></li>
+          <li><a href="#chat">AI Tips</a></li>
+          <li><a href="#vision">Vision</a></li>
+        </ul>
+      </nav>
+      <a class="pill-btn" id="getStartedTop" href="get.html">🚀 Get Started</a>
+    </div>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="container wrap">
+      <div>
+        <span class="badge">Empowering you to master your money, effortlessly</span>
+        <h1 class="title">Smart Spending. <span style="background:linear-gradient(120deg, var(--primary), var(--accent)); -webkit-background-clip:text; background-clip:text; color:transparent">Smarter Saving.</span></h1>
+        <p class="subtitle">SAVEMATE is an intelligent, India-first money coach that simplifies tracking, budgeting, and saving — in a friendly, local way.</p>
+        <div class="cta">
+          <button class="pill-btn" id="scrollToWallet">💰 Try SaveSphere</button>
+          <button class="pill-btn" id="scrollToTracker">📒 Add an Expense</button>
+          <button class="pill-btn" id="scrollToChat">🤖 Get AI Tip</button>
+        </div>
+        <div class="kpis">
+          <div class="kpi">💳 <b id="kpiTransactions">0</b><br><span class="sm">Transactions tracked</span></div>
+          <div class="kpi">🎯 <b id="kpiGoals">0</b><br><span class="sm">Active goals</span></div>
+          <div class="kpi">💸 <b id="kpiSaved">₹0</b><br><span class="sm">Saved this month</span></div>
+        </div>
+      </div>
+      <div class="card hero-visual">
+        <div class="glow"></div>
+        <div class="container" style="position:absolute; inset:12px;">
+          <h3 style="margin:10px 0 2px">SaveSphere Snapshot</h3>
+          <p class="lead">Create wallets, set targets, and watch progress grow.</p>
+          <div id="heroProgress" class="grid cols-3">
+            <!-- dynamic goal chips -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section id="problems">
+    <div class="container">
+      <h2>Why this matters — The Problems</h2>
+      <p class="lead">Based on the deck: lack of visibility, small overspends, and no real-time insights make saving hard — especially for students and early jobbers.</p>
+      <div class="grid cols-3">
+        <div class="card">🧩 <b>The Struggle is Real</b><br><span class="sm">Middle & lower-middle class often struggle to save despite regular income.</span></div>
+        <div class="card">🧾 <b>Where Does My Money Go?</b><br><span class="sm">Small daily spends add up; tracking is tedious.</span></div>
+        <div class="card">⏱️ <b>No Real-Time Insights</b><br><span class="sm">Hard to know if you’re on track until it’s too late.</span></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        🎯 <b>Target Audience</b><br>
+        <span class="sm">18–35 (students, early career, small business), smartphone users in urban & semi-urban India with goals like vacations, gadgets, education, emergency funds.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <p class="lead">AI tips, projections, simple interface, and motivational nudges. Local-language friendly.</p>
+      <div class="carousel" aria-label="Feature carousel">
+        <div class="slides" id="featureSlides">
+          <div class="slide">
+            <div class="panel">
+              <div class="card">
+                <h3>💡 Personalized Insights</h3>
+                <p>Understand your spending patterns. We group transactions and surface actions you can take this week.</p>
+                <ul>
+                  <li>Top 3 spend categories</li>
+                  <li>Weekly trend vs. last month</li>
+                  <li>One action to save ₹200–₹500</li>
+                </ul>
+              </div>
+              <div class="card">
+                <h3>📈 Projections</h3>
+                <p>Month-end and year-end savings estimates based on your current pace.</p>
+                <div id="projectionBox"></div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="panel">
+              <div class="card">
+                <h3>🔔 Budget Alerts</h3>
+                <p>Set a monthly budget and we’ll nudge you when categories heat up.</p>
+                <div class="grid cols-2">
+                  <div>
+                    <label>Monthly Budget (₹)</label>
+                    <input id="budgetInput" type="number" min="0" placeholder="e.g., 15000">
+                  </div>
+                  <div>
+                    <label>Alert at % of budget</label>
+                    <input id="alertPct" type="number" min="10" max="100" value="80">
+                  </div>
+                </div>
+                <div style="margin-top:10px">
+                  <button class="btn" id="saveBudget">Save Budget</button>
+                  <span id="budgetStatus" class="sm" style="margin-left:8px; color:var(--text-dim)"></span>
+                </div>
+              </div>
+              <div class="card">
+                <h3>🗣️ Hinglish UX</h3>
+                <p>Simple words, India-first interface. “Aaj ka kharcha”, “Kal ka goal”, “Chhoti bachat, bada fayda”.</p>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="panel">
+              <div class="card">
+                <h3>⚡ Motivational Nudges</h3>
+                <p>Micro-reminders keep you consistent. Get a gentle push when you skip saving days.</p>
+                <button class="btn" id="demoNudge">Demo Nudge</button>
+              </div>
+              <div class="card">
+                <h3>🔒 Privacy by Design</h3>
+                <p>All data stays on your device in this prototype (LocalStorage). No servers attached.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dots" id="featureDots" aria-label="Feature dots"></div>
+    </div>
+  </section>
+
+  <section id="wallet">
+    <div class="container">
+      <h2>Introducing <span style="color:var(--primary)">SaveSphere</span> — Multi-Goal Wallets</h2>
+      <p class="lead">Create separate wallets for different saving goals. Add deposits and watch progress.</p>
+      <div class="panel">
+        <div class="card">
+          <h3>Create Goal</h3>
+          <div class="grid cols-2">
+            <div>
+              <label>Goal name</label>
+              <input id="goalName" placeholder="e.g., New Phone" />
+            </div>
+            <div>
+              <label>Target Amount (₹)</label>
+              <input id="goalTarget" type="number" min="0" placeholder="e.g., 20000" />
+            </div>
+          </div>
+          <div class="grid cols-2" style="margin-top:10px">
+            <div>
+              <label>Daily Reminder? (optional)</label>
+              <select id="goalReminder">
+                <option value="off">Off</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
+            <div style="display:flex; align-items:flex-end">
+              <button class="btn" id="addGoal">➕ Add Goal</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>My Goals</h3>
+          <div id="goalList" class="grid cols-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tracker">
+    <div class="container">
+      <h2>Track Income & Expenses</h2>
+      <p class="lead">Add transactions and categorize them. We’ll total it up and warn you when you’re near your budget.</p>
+      <div class="panel">
+        <div class="card">
+          <h3>Add Transaction</h3>
+          <div class="grid cols-2">
+            <div>
+              <label>Type</label>
+              <select id="txType">
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </div>
+            <div>
+              <label>Category</label>
+              <select id="txCategory">
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Bills</option>
+                <option>Shopping</option>
+                <option>Entertainment</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid cols-2" style="margin-top:10px">
+            <div>
+              <label>Amount (₹)</label>
+              <input id="txAmount" type="number" min="0" placeholder="e.g., 250" />
+            </div>
+            <div>
+              <label>Note</label>
+              <input id="txNote" placeholder="e.g., chai & samosa" />
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <button class="btn" id="addTx">➕ Add</button>
+            <button class="btn ghost" id="clearTx">🧹 Clear All</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Summary</h3>
+          <div class="grid cols-3">
+            <div class="kpi">Income<br><b id="sumIncome">₹0</b></div>
+            <div class="kpi">Expenses<br><b id="sumExpense">₹0</b></div>
+            <div class="kpi">Balance<br><b id="sumBalance">₹0</b></div>
+          </div>
+          <div style="margin-top:12px">
+            <div class="badge" id="budgetBadge">No budget set</div>
+          </div>
+          <div style="margin-top:12px; max-height:220px; overflow:auto">
+            <table id="txTable">
+              <thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th><th>Note</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="chat">
+    <div class="container">
+      <h2>AI Tips (Prototype)</h2>
+      <p class="lead">A lightweight mock of the chatbot that gives finance tips based on your recent data.</p>
+      <div class="panel">
+        <div class="card">
+          <div class="chat" id="chatBox" aria-live="polite"></div>
+          <div style="display:flex; gap:10px; margin-top:10px">
+            <input id="chatInput" placeholder="Ask: How can I save more on food?">
+            <button class="btn" id="sendChat">Send</button>
+            <button class="btn ghost" id="seedTips">Suggest Tip</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>How it works (in this demo)</h3>
+          <ul>
+            <li>Reads your latest transactions (local only)</li>
+            <li>Finds your top spend category</li>
+            <li>Returns a contextual, India-first saving tip</li>
+          </ul>
+          <p class="sm" style="color:var(--text-dim)">This is a placeholder. In a real app, this connects to an AI backend.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision">
+    <div class="container">
+      <h2>Vision & Next Steps</h2>
+      <div class="grid cols-3">
+        <div class="card">🌏 <b>Localized for India</b><br><span class="sm">INR-first, Hinglish UX, culturally familiar categories.</span></div>
+        <div class="card">🆓 <b>Freemium Rollout</b><br><span class="sm">Free basics for mass adoption; optional upgrades later.</span></div>
+        <div class="card">🧪 <b>Beta Plan</b><br><span class="sm">Build MVP → Test with 100–200 users → Iterate → Launch.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footgrid">
+      <div>
+        <div class="brand"><span style="font-size:22px">💠</span> SAVEMATE</div>
+        <p class="sm">© <span id="year"></span> SaveMate Prototype. No data leaves your device in this demo.</p>
+      </div>
+      <div>
+        <b>Quick Links</b>
+        <div><a href="#wallet">SaveSphere</a></div>
+        <div><a href="#tracker">Tracker</a></div>
+        <div><a href="#chat">AI Tips</a></div>
+      </div>
+      <div>
+        <b>Contact</b>
+        <div class="sm">team@savemate.demo</div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Social Icons Fixed Bottom Right -->
+  <div class="social-icons">
+    <a href="https://github.com/" target="_blank" aria-label="GitHub" title="GitHub">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="#e5e7eb" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.483 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.338 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.337 4.695-4.566 4.944.359.309.678.919.678 1.853 0 1.337-.012 2.419-.012 2.749 0 .268.18.579.688.481C19.138 20.2 22 16.448 22 12.021 22 6.484 17.523 2 12 2Z"/>
+      </svg>
+    </a>
+    <a href="https://twitter.com/" target="_blank" aria-label="Twitter" title="Twitter">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="#e5e7eb" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.46 5.924c-.793.352-1.645.59-2.54.698a4.48 4.48 0 0 0 1.963-2.475 8.94 8.94 0 0 1-2.828 1.082 4.48 4.48 0 0 0-7.636 4.086A12.72 12.72 0 0 1 3.112 4.89a4.48 4.48 0 0 0 1.388 5.976 4.47 4.47 0 0 1-2.03-.561v.057a4.48 4.48 0 0 0 3.593 4.393 4.5 4.5 0 0 1-2.025.077 4.48 4.48 0 0 0 4.184 3.114A8.98 8.98 0 0 1 2 19.54a12.67 12.67 0 0 0 6.88 2.017c8.26 0 12.784-6.84 12.784-12.77 0-.195-.005-.39-.014-.583A9.22 9.22 0 0 0 24 4.59a8.93 8.93 0 0 1-2.54.697z"/>
+      </svg>
+    </a>
+  </div>
+
+  <script>
+    // Redirect legacy prototype to new app structure served by Node.
+    (function(){
+      var to = setTimeout(function(){ window.location.href = '/'; }, 300);
+      console.warn('This legacy prototype moved. Redirecting to / ...');
+    })();
+  </script>
+</body>
+</html>
