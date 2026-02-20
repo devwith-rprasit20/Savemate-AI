@@ -14,7 +14,7 @@ Built with **React, Node.js, MongoDB, TailwindCSS**, and powered by **OpenAI LLM
 
 ---
 
-## ⚙️ Working  
+ 
 
 ### 🌏 Localized for India  
 - INR-first, Hinglish UX, culturally familiar categories.  
